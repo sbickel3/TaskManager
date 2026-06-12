@@ -1,0 +1,9 @@
+<div class="home">
+  <ul>
+    @for (option of options; track option.title) {
+        <li><a [routerLink]="option.route">{{ option.title }}</a></li>
+    }
+  </ul>
+</div>
+
+
