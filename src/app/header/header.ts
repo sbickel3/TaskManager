@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { signal } from '@angular/core';
 
 @Component({
   selector: 'app-header',
@@ -8,5 +9,13 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './header.css',
 })
 export class Header {
+isMenuOpen = signal(false);
 
+  toggleMenu() {
+    this.isMenuOpen.update(state => !state);
+  }
+
+  closeMenu() {
+    this.isMenuOpen.set(false);
+  }
 }
