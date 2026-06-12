@@ -2,6 +2,9 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.1.
 
+## Deployed App
+If you don't want to run the app locally, you can just test it using the following link: https://task-manager-self-one-18.vercel.app/
+
 ## Development server
 
 To start a local development server, run:
