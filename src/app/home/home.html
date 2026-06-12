@@ -1,9 +1,12 @@
-<div class="home">
-  <ul>
+<div class="d-flex flex-column align-items-center gap-2 home">
     @for (option of options; track option.title) {
-        <li><a [routerLink]="option.route">{{ option.title }}</a></li>
+      <a 
+        class="btn btn-outline-dark btn-lg btn-block" 
+        [routerLink]="option.route" 
+        routerLinkActive="active">
+        {{ option.title }}
+      </a>
     }
-  </ul>
 </div>
 
 
