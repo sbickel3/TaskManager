@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { PLATFORM_ID } from '@angular/core';
 import { TaskDataService } from './task-data';
-import { Task } from '../../model/Task';
 import { vi } from 'vitest';
+import { Task } from '../../model/Task';
 
 describe('TaskData', () => {
   let service: TaskDataService;
@@ -33,19 +33,23 @@ describe('TaskData', () => {
     });
   });
 
-it('should be created and initialize with an empty array if storage is blank', () => {
+it('should be created and initialize with an empty map if storage is blank', () => {
     service = TestBed.inject(TaskDataService);
     expect(service).toBeTruthy();
-    expect(service.tasks()).toEqual([]);
+    expect(service.tasks()).toEqual(new Map<number, Task>());
   });
 
   it('should load initial tasks from localStorage if they exist', () => {
-    const mockTasks: Task[] = [{ id: 1, title: 'Test Task', description: 'something' }];
-    store['my_tasks_app'] = JSON.stringify(mockTasks);
+    const localStorageMock = { "1": { "description": "something", "id": 1, "title": "TestTask" } };
+    store['my_tasks_app'] = JSON.stringify(localStorageMock);
 
     service = TestBed.inject(TaskDataService);
 
-    expect(service.tasks()).toEqual(mockTasks);
+    const expectedMap = new Map<number, any>([
+      [1, { description: 'something', id: 1, title: 'TestTask' }]
+    ]);
+
+    expect(service.tasks()).toEqual(expectedMap);
   });
 });
 
