@@ -30,7 +30,7 @@ export class TaskDataService {
       }
     }
 
-    // Use an Effect to serialize the Map to a plain object string for LocalStorage
+    // Use an effect update LocalStorage when there is a change to signal data
     effect(() => {
       if (isPlatformBrowser(this.platformId)) {
         const currentMap = this.tasks();
