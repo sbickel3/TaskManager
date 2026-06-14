@@ -29,7 +29,6 @@ export class UpdateTask {
   openUpdateModal(task: Task): void {
     this.currentTaskId = task.id;
     
-    // Fill the form with CURRENT values
     this.updateForm.patchValue({
       title: task.title,
       description: task.description
@@ -47,7 +46,7 @@ export class UpdateTask {
         description: this.updateForm.value.description!
       };
 
-      this.taskData.updateTask(updatedTask); // Assumes updateTask method exists in service
+      this.taskData.updateTask(updatedTask);
       this.modalInstance.hide();
     }
   }

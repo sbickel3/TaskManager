@@ -9,7 +9,6 @@ import * as bootstrap from 'bootstrap';
   styleUrl: './delete-task.css',
 })
 export class DeleteTask {
-  // protected tasks: Task[] = [];
   private taskToDeleteId: number | null = null;
   private modalInstance: any;
   private taskData = inject(TaskDataService);
@@ -17,18 +16,16 @@ export class DeleteTask {
 
   @ViewChild('deleteModal') deleteModalElement!: ElementRef;
 
-  // Store the ID and open the modal
   prepareDelete(id: number): void {
     this.taskToDeleteId = id;
     this.modalInstance = new bootstrap.Modal(this.deleteModalElement.nativeElement);
     this.modalInstance.show();
   }
 
-  // Perform the actual deletion
   confirmDelete(): void {
     if (this.taskToDeleteId !== null) {
       this.taskData.deleteTask(this.taskToDeleteId);
-      this.modalInstance.hide(); // Close the modal
+      this.modalInstance.hide();
       this.taskToDeleteId = null;
     }
   }

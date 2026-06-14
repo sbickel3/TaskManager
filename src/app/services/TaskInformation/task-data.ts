@@ -26,8 +26,13 @@ private STORAGE_KEY = 'my_tasks_app';
     });
   }
 
-  addTask(newTask: Task): void {
+  addTask(newTask: Task): boolean {
+    const idExists = this.tasks().some(task => task.id === newTask.id);
+    if (idExists) {
+      return false;
+    }
     this.tasks.update(currentTasks => [...currentTasks, newTask]);
+    return true;
   }
 
   deleteTask(id: number): void {
