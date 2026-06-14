@@ -1,5 +1,4 @@
-import { Component, inject } from '@angular/core';
-import { Task } from '../../model/Task';
+import { Component, inject, computed } from '@angular/core';
 import { TaskDataService } from '../../services/TaskInformation/task-data';
 
 @Component({
@@ -10,5 +9,9 @@ import { TaskDataService } from '../../services/TaskInformation/task-data';
 })
 export class ViewTask {
   private taskData = inject(TaskDataService);
-  protected tasksToShow = this.taskData.tasks;
+
+  // use computed signal to convert map to list for template for loop
+  protected tasksToShow = computed(() => {
+    return Array.from(this.taskData.tasks().values());
+  });
 }

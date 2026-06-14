@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild, computed } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import * as bootstrap from 'bootstrap';
 import { TaskDataService } from '../../services/TaskInformation/task-data';
@@ -13,7 +13,9 @@ import { Task } from '../../model/Task';
 export class UpdateTask {
   private fb = inject(FormBuilder);
   private taskData = inject(TaskDataService);
-  protected tasksToShow = this.taskData.tasks;
+  protected tasksToShow = computed(() => {
+    return Array.from(this.taskData.tasks().values());
+  });
   
   private modalInstance: any;
   private currentTaskId: number | null = null;

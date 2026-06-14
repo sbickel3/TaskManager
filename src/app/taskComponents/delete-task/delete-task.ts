@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild, computed } from '@angular/core';
 import { TaskDataService } from '../../services/TaskInformation/task-data';
 import * as bootstrap from 'bootstrap';
 
@@ -12,7 +12,9 @@ export class DeleteTask {
   private taskToDeleteId: number | null = null;
   private modalInstance: any;
   private taskData = inject(TaskDataService);
-  protected tasksToShow = this.taskData.tasks;
+  protected tasksToShow = computed(() => {
+    return Array.from(this.taskData.tasks().values());
+  });
 
   @ViewChild('deleteModal') deleteModalElement!: ElementRef;
 

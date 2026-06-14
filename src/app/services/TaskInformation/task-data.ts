@@ -6,40 +6,60 @@ import { Task } from '../../model/Task';
   providedIn: 'root',
 })
 export class TaskDataService {
-private STORAGE_KEY = 'my_tasks_app';
+  private STORAGE_KEY = 'my_tasks_app';
 
-  tasks = signal<Task[]>([]);
+  tasks = signal<Map<number, Task>>(new Map());
 
   constructor(@Inject(PLATFORM_ID) private platformId: object) {
     if (isPlatformBrowser(this.platformId)) {
       const storedData = localStorage.getItem(this.STORAGE_KEY);
       if (storedData) {
-        this.tasks.set(JSON.parse(storedData));
+        try {
+          const parsedObject = JSON.parse(storedData);
+          
+          // Convert the plain localStorage object entries back into a native Map
+          const restoredMap = new Map<number, Task>(
+            Object.entries(parsedObject).map(([key, value]) => [Number(key), value as Task])
+          );
+          
+          this.tasks.set(restoredMap);
+        } catch (e) {
+          console.error('Failed to parse localStorage data', e);
+          this.tasks.set(new Map());
+        }
       }
     }
 
-   // Use an Effect to save to LocalStorage whenever the Signal changes
+    // Use an Effect to serialize the Map to a plain object string for LocalStorage
     effect(() => {
       if (isPlatformBrowser(this.platformId)) {
-        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.tasks()));
+        const currentMap = this.tasks();
+        const objectToSave = Object.fromEntries(currentMap.entries());
+        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(objectToSave));
       }
     });
   }
 
   addTask(newTask: Task): boolean {
-    const idExists = this.tasks().some(task => task.id === newTask.id);
-    if (idExists) {
+    if (this.tasks().has(newTask.id)) {
       return false;
     }
-    this.tasks.update(currentTasks => [...currentTasks, newTask]);
+
+    this.tasks.update(currentMap => new Map(currentMap).set(newTask.id, newTask));
     return true;
   }
 
   deleteTask(id: number): void {
-    this.tasks.update(currentTasks => currentTasks.filter(t => t.id !== id));
+    const isDeleted = this.tasks().delete(id);
+
+    if (isDeleted) {
+      this.tasks.update(() => new Map(this.tasks()));
+    } else {
+      console.log("error removing task");
+    }
   }
 
   updateTask(updatedTask: Task): void {
-    this.tasks.update(currentTasks =>  currentTasks.map(task => task.id === updatedTask.id ? updatedTask : task));
+    this.tasks.update(currentMap => new Map(currentMap).set(updatedTask.id, updatedTask));
   }
 }
