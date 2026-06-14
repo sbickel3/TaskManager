@@ -12,11 +12,10 @@ import * as bootstrap from 'bootstrap';
 })
 export class AddTask {
   private formBuilder = inject(FormBuilder); 
+  private taskData = inject(TaskDataService);
 
   // Grab the toast element from the template
   @ViewChild('successToast', { static: true }) toastElement!: ElementRef;
-
-  constructor(private taskData: TaskDataService){}
 
   // Define the form structure
   taskForm = this.formBuilder.group({
